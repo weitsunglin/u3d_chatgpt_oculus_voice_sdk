@@ -5,66 +5,61 @@ using TMPro;
 
 public class AskButtonManager : MonoBehaviour
 {
+    [Header("Elements")]
+    [SerializeField] private DiscussionManager discussionManager;
+    [SerializeField] private STTBridge sttBridge;
+    [SerializeField] private TMP_InputField promptInputField;
 
-    [ Header ( "Elements" ) ]
-    [ SerializeField ] private DiscussionManager discussionManager;
-    [ SerializeField ] private STTBridge sttBridge;
-    [ SerializeField ] private TMP_InputField promptInpurField ;
-
-    [ Header ( "Settings" ) ]
+    [Header("Settings")]
     private bool recording;
 
-
-    [ Header ( "Graphics" ) ]
-    [ SerializeField ] private GameObject askText ;
-    [ SerializeField ] private GameObject micImage ;
-
+    [Header("Graphics")]
+    [SerializeField] private GameObject askText;
+    [SerializeField] private GameObject micImage;
 
     void Start()
     {
         ShowMicImage();
-        promptInpurField.onValueChanged.AddListener( InputFieldVauleChagedCallback );
+        promptInputField.onValueChanged.AddListener(InputFieldValueChangedCallback);
     }
 
     void Update()
     {
-        if ( promptInpurField && recording == false )
+        if (promptInputField && recording == false)
         {
-            if (promptInpurField.text.Length != 0 )
+            if (promptInputField.text.Length != 0)
             {
                 ShowAskText();
-            }  
+            }
         }
     }
 
     public void PointerDownCallback()
     {
-        if( promptInpurField.text.Length > 0 )
+        if (promptInputField.text.Length > 0)
         {
             discussionManager.AskButtonCallBack();
         }
         else
         {
-            sttBridge.SetActivation( true );
-             recording = true;
+            sttBridge.SetActivation(true);
+            recording = true;
         }
     }
 
     public void PointerUpCallback()
     {
-        sttBridge.SetActivation( false );
+        sttBridge.SetActivation(false);
         recording = false;
-
-        InputFieldVauleChagedCallback( promptInpurField.text );
+        InputFieldValueChangedCallback(promptInputField.text);
     }
 
-    
-    private void InputFieldVauleChagedCallback( string prompt )
+    private void InputFieldValueChangedCallback(string prompt)
     {
-        if( recording )
+        if (recording)
             return;
 
-        if (prompt.Length <= 0 )
+        if (prompt.Length <= 0)
         {
             ShowMicImage();
         }
@@ -76,13 +71,13 @@ public class AskButtonManager : MonoBehaviour
 
     private void ShowMicImage()
     {
-        askText.SetActive( false );
-        micImage.SetActive( true );
+        askText.SetActive(false);
+        micImage.SetActive(true);
     }
 
     private void ShowAskText()
     {
-        askText.SetActive( true );
-        micImage.SetActive( false );
+        askText.SetActive(true);
+        micImage.SetActive(false);
     }
 }

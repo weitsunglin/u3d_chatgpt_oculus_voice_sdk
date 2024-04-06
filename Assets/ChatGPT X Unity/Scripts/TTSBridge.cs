@@ -5,41 +5,36 @@ using Meta.WitAi.TTS.Utilities;
 
 public class TTSBridge : MonoBehaviour
 {
-    // 文字 >> 語音
-
-
-    [ Header ( "Elements" ) ]
-    [ SerializeField ] private TTSSpeaker speaker; 
-
+    [Header("Elements")]
+    [SerializeField] private TTSSpeaker speaker;
 
     void Start()
     {
         DiscussionBubble.onVoiceButtonClicked += Speak;
     }
 
-    private void onDestroy()
+    private void OnDestroy()
     {
         DiscussionBubble.onVoiceButtonClicked -= Speak;
     }
 
-    private void VoiceButtonClickedCallback( string message )
+    private void VoiceButtonClickedCallback(string message)
     {
-        if( speaker.IsSpeaking )
+        if (speaker.IsSpeaking)
         {
-            Debug.Log( "Stopping the Speaker" );
+            Debug.Log("Stopping the Speaker");
             speaker.Stop();
         }
         else
         {
-            Debug.Log( "Started Speaking" );
-            Speak( message );
+            Debug.Log("Started Speaking");
+            Speak(message);
         }
     }
 
-    private void Speak( string message )
+    private void Speak(string message)
     {
-        string[] messages =  message.Split( '.' );
-        speaker.StartCoroutine( speaker.SpeakQueuedAsync( messages ) );
+        string[] messages = message.Split('.');
+        speaker.StartCoroutine(speaker.SpeakQueuedAsync(messages));
     }
-
 }
